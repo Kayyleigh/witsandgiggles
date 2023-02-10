@@ -1,6 +1,7 @@
 package com.application.witsandgiggles.domain;
 
 import com.application.witsandgiggles.converters.GridConverter;
+import com.application.witsandgiggles.enums.PuzzleType;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -19,7 +20,7 @@ public class Sudoku extends Puzzle {
     }
 
     public Sudoku(String title, String description, User constructor, boolean isPublished, int gridSize) {
-        super(title, description, constructor, isPublished);
+        super(PuzzleType.Sudoku, title, description, constructor, isPublished);
         this.gridSize = gridSize;
         this.grid = new int[gridSize][gridSize];
     }

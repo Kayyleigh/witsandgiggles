@@ -6,6 +6,8 @@ import com.application.witsandgiggles.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -23,5 +25,13 @@ public class UserService {
 
     public Iterable<User> getAllUsers() {
         return userRepo.findAll();
+    }
+
+    public Optional<User> getUser(Long id) {
+        if (!userRepo.existsById(id)) {
+            return Optional.empty();
+        } else {
+            return userRepo.findById(id);
+        }
     }
 }
