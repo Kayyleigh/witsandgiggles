@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>WitsAndRiddles</title>
+</head>
+<body>
+<h1>User Registration</h1>
+
+<form action="#" th:action="@{/users/register}" method="post" th:object="${userModel}">
+    <label>Username:</label>
+    <input type="text" th:field="*{username}" />
+
+    <br/>
+
+    <label>Bio:</label>
+    <input type="text" th:field="*{bio}" />
+
+    <button type="submit">Register</button>
+</form>
+<span th:text="${userModel.username}"></span><span> is already taken.</span>
+    <!-- TODO: Make sure user doesn't see "is already taken." on first try
+
+</body>
+</html>

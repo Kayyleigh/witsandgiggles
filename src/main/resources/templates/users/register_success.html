@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>WitsAndRiddles</title>
+</head>
+<body>
+<h1>Registration Successful</h1>
+
+<span>You are now registered as: </span><span th:text="${userModel.username}"></span>
+
+<br/>
+
+<a href="/users/list">See all users</a>
+
+</body>
+</html>
