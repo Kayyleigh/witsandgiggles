@@ -1,6 +1,5 @@
 package com.application.witsandgiggles.domain;
 
-import com.application.witsandgiggles.converters.ArrayConverter;
 import com.application.witsandgiggles.converters.GridConverter;
 import com.application.witsandgiggles.enums.PuzzleType;
 import com.application.witsandgiggles.enums.SudokuBoxType;
@@ -72,6 +71,38 @@ public class Sudoku extends Puzzle {
                 this.setBoxForCell(i, j, (-i * this.gridSize) -j);
             }
         }
+    }
+
+    public boolean canPlace(int row, int column, int digit) {
+        for (int i = 0; i < this.gridSize; i++) {
+            if (row != i && this.grid[i][column] == digit) {
+                return false;
+            }
+        }
+        for (int j = 0; j < this.gridSize; j++) {
+            if (column != j && this.grid[row][j] == digit) {
+                return false;
+            }
+        }
+        return canPlaceInBox(row, column, digit);
+    }
+
+    //TODO this feels like that Kruskal thing where you merge/join sets etc...
+    // would be better, that lowers time complexity of this method
+
+    // for now I will do the ugly thing
+    public boolean canPlaceInBox(int row, int column, int digit) {
+        int boxNumber = this.boxPerCell[row][column];
+        for (int i = 0; i < this.gridSize; i++) {
+            for (int j = 0; j < this.gridSize; j++) {
+                if (!(i == row && j == column)
+                        && this.boxPerCell[i][j] == boxNumber
+                        && this.grid[i][j] == digit) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override
