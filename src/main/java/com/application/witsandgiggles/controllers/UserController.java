@@ -1,11 +1,7 @@
 package com.application.witsandgiggles.controllers;
 
 import com.application.witsandgiggles.domain.User;
-import com.application.witsandgiggles.models.UserModel;
-import com.application.witsandgiggles.repository.UserRepository;
 import com.application.witsandgiggles.services.UserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,15 +26,15 @@ public class UserController {
 
     @GetMapping("/register")
     public String showForm(Model model) {
-        UserModel userModel = new UserModel();
-        model.addAttribute("userModel", userModel);
+        User user = new User();
+        model.addAttribute("userModel", user);
         return "users/register_form";
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("userModel") UserModel userModel) {
+    public String register(@ModelAttribute("userModel") User user) {
         try {
-            userService.insert(userModel);
+            userService.insert(user);
             return "users/register_success";
         } catch (Exception e) {
             return "users/register_form";

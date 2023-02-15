@@ -1,14 +1,25 @@
 package com.application.witsandgiggles.domain;
 
+import com.application.witsandgiggles.enums.Role;
 import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "appUser")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,6 +27,10 @@ public class User {
 
     @Column(name = "username", nullable = false, unique = true)
     private String username;
+
+    private String email;
+    private String password;
+
     private String bio;
 
     @OneToMany
@@ -26,59 +41,36 @@ public class User {
     @JoinColumn(name = "solver_id")
     private List<Solve> solves;
 
-    public User() {
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public User(String username, String bio) {
-        this.username = username;
-        this.bio = bio;
-        this.creations = new ArrayList<>(); // this could be a Set too but I like Lists
-        this.solves = new ArrayList<>();
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public Long getId() {
-        return id;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public List<Puzzle> getCreations() {
-        return creations;
-    }
-
-    public void setCreations(List<Puzzle> creations) {
-        this.creations = creations;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     public void addCreation(Puzzle creation) {
         this.creations.add(creation);
-    }
-
-    public List<Solve> getSolves() {
-        return solves;
-    }
-
-    public void setSolves(List<Solve> solves) {
-        this.solves = solves;
     }
 
     public void addSolve(Solve solve) {
@@ -89,10 +81,13 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", userName='" + username + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 ", bio='" + bio + '\'' +
                 ", creations=" + creations +
                 ", solves=" + solves +
+                ", role=" + role +
                 '}';
     }
 

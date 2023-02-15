@@ -1,7 +1,6 @@
 package com.application.witsandgiggles.services;
 
 import com.application.witsandgiggles.domain.User;
-import com.application.witsandgiggles.models.UserModel;
 import com.application.witsandgiggles.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +17,7 @@ public class UserService {
         this.userRepo = userRepo;
     }
 
-    public User insert(UserModel userModel) throws IllegalArgumentException {
-        User user = userModel.getUser();
+    public User insert(User user) throws IllegalArgumentException {
         return userRepo.save(user);
     }
 
