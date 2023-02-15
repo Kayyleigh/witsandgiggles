@@ -24,7 +24,7 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**")    // whitelist all /api/auth/ methods
+                .requestMatchers("/api/auth/**", "/", "/users/register")    // whitelist all /api/auth/ methods
                 .permitAll()
                 .anyRequest()
                 .authenticated()

@@ -1,22 +1,24 @@
 package com.application.witsandgiggles.controllers;
 
+import com.application.witsandgiggles.auth.AuthenticationService;
+import com.application.witsandgiggles.auth.RegisterRequest;
 import com.application.witsandgiggles.domain.User;
 import com.application.witsandgiggles.services.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Controller
 @RequestMapping(path = "/users")
 public class UserController {
 
     private final UserService userService;
+    private final AuthenticationService authenticationService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     @RequestMapping("/list")
     public String getUsers(Model model) {
@@ -25,19 +27,19 @@ public class UserController {
     }
 
     @GetMapping("/register")
-    public String showForm(Model model) {
-        User user = new User();
-        model.addAttribute("userModel", user);
+    public String showRegistrationForm(Model model) {
+        RegisterRequest request = new RegisterRequest();
+        model.addAttribute("registerRequest", request);
         return "users/register_form";
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("userModel") User user) {
+    public String register(@ModelAttribute("registerRequest") RegisterRequest request) {
         try {
-            userService.insert(user);
-            return "users/register_success";
+            authenticationService.register(request);
+            return "redirect:/users/register?successful";
         } catch (Exception e) {
-            return "users/register_form";
+            return "redirect:/users/register?unsuccessful";
         }
     }
 

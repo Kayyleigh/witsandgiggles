@@ -1,25 +1,59 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>WitsAndRiddles</title>
+    <link th:href="@{/main.css}" rel="stylesheet" />
 </head>
 <body>
 <h1>User Registration</h1>
 
-<form action="#" th:action="@{/users/register}" method="post" th:object="${userModel}">
+<form action="#" th:action="@{/users/register}" method="POST" th:object="${registerRequest}">
     <label>Username:</label>
     <input type="text" th:field="*{username}" />
 
     <br/>
 
-    <label>Bio:</label>
-    <input type="text" th:field="*{bio}" />
+    <label>Email:</label>
+    <input type="email" th:field="*{email}" />
+
+    <br/>
+
+    <label>Password:</label>
+    <input type="password" th:field="*{password}" id="pwd"/>
+    <input type="checkbox" onmousedown="showPassword(this)" onmouseup="hidePassword(this)">Show Password
+
+    <br/>
 
     <button type="submit">Register</button>
+
+    <br/>
+
+    <span>Already have an account? <a href="/" th:href="@{/login}">Log in</a></span>
+
 </form>
-<span th:text="${userModel.username}"></span><span> is already taken.</span>
-    <!-- TODO: Make sure user doesn't see "is already taken." on first try -->
+
+<div th:if="${param.unsuccessful}">
+    <span>This username is already taken.</span>
+</div>
+
+<div th:if="${param.successful}">
+    <span>You are now successfully registered</span>
+</div>
+
+<script>
+    function showPassword(elem) {
+        let x = document.getElementById("pwd");
+        x.type = "text";
+        elem.checked=true;
+    }
+
+    function hidePassword(elem) {
+        let x = document.getElementById("pwd");
+        x.type = "password";
+        elem.reset();
+    }
+</script>
 
 </body>
 </html>
