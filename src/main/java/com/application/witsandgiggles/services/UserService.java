@@ -32,4 +32,8 @@ public class UserService {
             return userRepo.findById(id);
         }
     }
+
+    public Optional<User> getUser(String username) {
+        return userRepo.findByUsername(username);
+    }
 }
