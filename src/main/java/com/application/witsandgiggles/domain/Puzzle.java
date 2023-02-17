@@ -1,5 +1,6 @@
 package com.application.witsandgiggles.domain;
 
+import com.application.witsandgiggles.enums.PuzzleType;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -12,6 +13,7 @@ public abstract class Puzzle {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private PuzzleType puzzleType;
     private String title;
     private String description;
     private boolean isPublished;
@@ -23,11 +25,16 @@ public abstract class Puzzle {
 
     }
 
-    public Puzzle(String title, String description, User constructor, boolean isPublished) {
+    public Puzzle(PuzzleType puzzleType, String title, String description, User constructor, boolean isPublished) {
+        this.puzzleType = puzzleType;
         this.title = title;
         this.description = description;
         this.constructor = constructor;
         this.isPublished = isPublished;
+    }
+
+    public PuzzleType getPuzzleType() {
+        return puzzleType;
     }
 
     public String getTitle() {

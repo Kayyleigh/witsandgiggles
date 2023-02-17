@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>WitsAndGiggles</title>
+</head>
+<body>
+<h1 th:text="${user.username}"></h1><h1>'s profile</h1>
+<p th:text="${user.bio}"></p>
+
+<h2>Created</h2>
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Bio</th>
+        <th>Creations</th>
+        <th>Solves</th>
+    </tr>
+    <tr th:each="puzzle : ${user.creations}">
+        <td th:text="${puzzle.title}"></td>
+        <td th:text="${puzzle.puzzleType}"></td>
+    </tr>
+</table>
+
+</br>
+
+<h2>Solved</h2>
+
+<table>
+    <tr th:each="solve : ${user.solves}">
+        <td th:text="${solve.puzzle.title}"></td>
+        <td th:text="${solve.puzzle.constructor.username}"></td>
+        <td th:text="${solve.duration}"></td>
+    </tr>
+</table>
+
+<a href="/users/list">Back</a>
+
+
+</body>
+</html>
