@@ -1,4 +1,4 @@
-package com.application.witsandgiggles.models;
+package com.application.witsandgiggles.messages;
 
 import com.application.witsandgiggles.domain.Puzzle;
 import com.application.witsandgiggles.domain.Solve;

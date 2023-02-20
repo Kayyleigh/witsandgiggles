@@ -1,24 +1,22 @@
 package com.application.witsandgiggles.controllers;
 
 import com.application.witsandgiggles.auth.AuthManager;
-import com.application.witsandgiggles.auth.AuthenticationRequest;
 import com.application.witsandgiggles.auth.AuthenticationService;
-import com.application.witsandgiggles.auth.RegisterRequest;
 import com.application.witsandgiggles.domain.User;
-import com.application.witsandgiggles.models.UserMessage;
+import com.application.witsandgiggles.messages.UserMessage;
 import com.application.witsandgiggles.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin
 @RestController
-@RequestMapping(path ="/users")
+@RequestMapping(path ="/api/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -77,18 +75,17 @@ public class UserController {
         return "users/user_profile";
     }
     */
-    @GetMapping("/lalala")
-    public ResponseEntity<String> getStr() {
-        return ResponseEntity.ok(authManager.getUsername());
-    }
-    @GetMapping("/lalala2")
-    public ResponseEntity<String> getStr2() {
-        return ResponseEntity.ok("Simple text");
+
+    @GetMapping("/all")
+    public ResponseEntity<Iterable<String>> allUsers() {
+        return ResponseEntity.ok(userService.getAllUsernames());
     }
 
-    @GetMapping("/username")
-    public ResponseEntity<UserMessage> currentUser() {
-        Optional<User> user = userService.getUser(authManager.getUsername());
+    @GetMapping("/profile/{username}")
+    public ResponseEntity<UserMessage> profile(
+            @PathVariable("username") String username
+    ) {
+        Optional<User> user = userService.getUser(username);
         if (user.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -98,8 +95,41 @@ public class UserController {
                 user.get().getBio(),
                 user.get().getCreations(),
                 user.get().getSolves()
-                );
+        );
 
         return ResponseEntity.ok(message);
+    }
+
+    @GetMapping("/username")
+    public ResponseEntity<String> currentUser() {
+        return ResponseEntity.ok(authManager.getUsername());
+    }
+
+    @GetMapping("/update/bio")
+    public ResponseEntity<String> updateBio(
+            @RequestParam String bio
+    ) {
+        Optional<User> userOptional = userService.getUser(authManager.getUsername());
+        if (userOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        User user = userOptional.get();
+        user = userService.updateBio(user, bio);
+
+        return ResponseEntity.ok(user.getBio());
+    }
+
+    @GetMapping("/update/email")
+    public ResponseEntity<String> updateEmail(
+            @RequestParam String email
+    ) {
+        Optional<User> userOptional = userService.getUser(authManager.getUsername());
+        if (userOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        User user = userOptional.get();
+        user = userService.updateEmail(user, email);
+
+        return ResponseEntity.ok(user.getEmail());
     }
 }

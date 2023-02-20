@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**")    // whitelist all /api/auth/ methods
+                .requestMatchers("/api/auth/**", "/api/users/all", "/api/users/profile/**")    // whitelist all auth, and show profiles
                 .permitAll()
                 .anyRequest()
                 .authenticated()
